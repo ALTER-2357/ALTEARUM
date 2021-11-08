@@ -1,0 +1,3 @@
+module CODENAME-ALTEARUM
+
+go 1.16
