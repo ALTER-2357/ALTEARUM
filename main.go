@@ -3,53 +3,60 @@ package main
 import (
 	"bytes"
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"math/rand"
 	"time"
 )
 
 /*data structure for header
 type Block struct {
-	data         string
-	previousHash string
-	timestamp    string
-	nonce        string
-	hash         string
+	data         string  `json:"Data"`
+	previousHash string  `json:"PrevHash"`
+	timestamp    string  `json:"timestamp"`
+	nonce        string  `json:"nonce"`
+	hash         string  `json:"hash"`
 }
 
-type transaction struct {
-	//	sender wallet.address
-	//	recipient wallet.address
-	amount string
+type Transaction struct {
+	//	sender wallet.address   `json:"sender"`
+	//	recipient wallet.address  `json:"recipent"`
+	amount string `json:"amount"`
 }
 
-type wallet struct {
-	address string
-	balance string
+type Wallet struct {
+	data    string  `json:"data"`
+	address string  `json:"address"`	
+	balance string  `json:"balance"`
 }
-
-
-
 */
+
+
 
 type BlockChain struct {
 	blocks []*Block
 }
 
+
+
 type Block struct {
-	Hash     []byte
-	Data     []byte
-	PrevHash []byte
+	Hash     []byte `json:"Hash"`
+	Data     []byte `json:"Data"`
+	PrevHash []byte `json:"PrevHash"`
 }
 
-
+//var blockchain []BlockChain = []BlockChain{}
 
 func main() {
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 4; i++ {
+	
 		for _, block := range chain.blocks {
 
-			data := RandStringRunes(10)
+			data := jsonpaser()
+
 			chain.AddBlock(data)
 
 			fmt.Printf("Previous Hash: %x\n", block.PrevHash)
@@ -65,6 +72,25 @@ func main() {
 
 
 
+func jsonpaser() string {
+
+	data, err := ioutil.ReadFile("userdata.json")
+	if err != nil {
+		fmt.Println("File reading error", err)
+		return ""
+	}
+	var users Block
+
+	json.Unmarshal(data, &users)
+
+	error := ioutil.WriteFile("userdata.json", data, 0644)
+	if error != nil {
+		log.Fatal(error)
+	}
+
+	return string(data)
+
+}
 
 
 
@@ -83,11 +109,6 @@ func RandStringRunes(n int) string {
 	}
 	return string(b)
 }
-
-
-
-
-
 
 var chain = InitBlockChain()
 
